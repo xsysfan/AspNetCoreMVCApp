@@ -79,7 +79,7 @@ namespace Products.Data.Entities
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Data Source=(local);Initial Catalog=Products;Integrated Security=True;MultipleActiveResultSets=True");
+                optionsBuilder.UseSqlServer(@"Data Source=(local)\SQLSERVER;Initial Catalog=Products;Integrated Security=True;MultipleActiveResultSets=True");
             }
         }
 
@@ -471,7 +471,7 @@ namespace Products.Data.Entities
     public class Product
     {
         public int ProductId { get; set; } // ProductId (Primary key)
-        public string ProductName { get; set; } // ProductName (length: 10)
+        public string ProductName { get; set; } // ProductName
         public int CategoryId { get; set; } // CategoryId
         public int SuplierId { get; set; } // SuplierId
         public decimal? Price { get; set; } // Price
@@ -545,7 +545,7 @@ namespace Products.Data.Entities
             builder.HasKey(x => x.ProductId).HasName("PK__tmp_ms_x__B40CC6CD02FCA087").IsClustered();
 
             builder.Property(x => x.ProductId).HasColumnName(@"ProductId").HasColumnType("int").IsRequired().ValueGeneratedOnAdd().UseIdentityColumn();
-            builder.Property(x => x.ProductName).HasColumnName(@"ProductName").HasColumnType("nchar(10)").IsRequired(false).IsFixedLength().HasMaxLength(10);
+            builder.Property(x => x.ProductName).HasColumnName(@"ProductName").HasColumnType("nvarchar(max)").IsRequired(false);
             builder.Property(x => x.CategoryId).HasColumnName(@"CategoryId").HasColumnType("int").IsRequired();
             builder.Property(x => x.SuplierId).HasColumnName(@"SuplierId").HasColumnType("int").IsRequired();
             builder.Property(x => x.Price).HasColumnName(@"Price").HasColumnType("money").IsRequired(false);
