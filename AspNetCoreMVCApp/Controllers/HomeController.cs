@@ -1,8 +1,11 @@
 ﻿using AspNetCoreMVCApp.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace AspNetCoreMVCApp.Controllers
 {
@@ -16,29 +19,55 @@ namespace AspNetCoreMVCApp.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AuthorizationPage()
         {
             return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Index(LoginPageModel model)
+        public IActionResult AuthorizationPage(LoginPageModel model)
         {
-            if (ModelState.IsValid)
+            var userClaims = new List<Claim>()
             {
-                FormsAuthentication.SetAuthCookie(model.Username, true);
-                return RedirectToAction("AuthorizedHomepage");
+                new Claim(ClaimTypes.Name, "ProductsSeller")
+            };
+
+            var userIdentities = new ClaimsIdentity(userClaims, "ApplicationUserIdentity");
+
+            var userPricipal = new ClaimsPrincipal(new[] { userIdentities });
+
+            if(model.Password == "akmal")
+            {
+                HttpContext.SignInAsync(userPricipal);
+
+                return RedirectToAction("Index");
             }
 
-            return View(model);
+            return RedirectToAction("NotAuthorized");
         }
 
-        [Authorize]
-        public IActionResult AuthorizedHomepage(LoginPageModel model)
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult NotAuthorized()
         {
-            return View(model);
+            return View();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult OptOut()
+        {
+            HttpContext.SignOutAsync();
+            return RedirectToAction("AuthorizationPage");
         }
 
         [Authorize]
