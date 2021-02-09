@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -22,7 +23,7 @@ namespace AspNetCoreMVCApp.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            return View();
+            return View(new SalesEntryFormModel() { SalesmanLogin = HttpContext.User.Identity.Name, CurrentDate = DateTime.Now.ToString("yyyy/MM/dd") });
         }
 
         [HttpGet]
@@ -38,7 +39,7 @@ namespace AspNetCoreMVCApp.Controllers
         {
             var userClaims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name, "ProductsSeller")
+                new Claim(ClaimTypes.Name, model.UserName)
             };
 
             var userIdentities = new ClaimsIdentity(userClaims, "ApplicationUserIdentity");
