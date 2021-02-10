@@ -1,0 +1,25 @@
+﻿@model SalesEntryFormModel 
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1>Sales Entry Form</h1>
+    <br />
+    <br />
+    <hr />
+    <table>
+        <tr>
+            <td>Salesman</td>
+            <td>&nbsp;</td>
+            <td>@Html.EditorFor(model => model.SalesmanLogin)</td>
+
+            <td width="40%">&nbsp;</td>
+            <td>Current Date</td>
+            <td>&nbsp;</td>
+            <td>@Html.EditorFor(model => model.CurrentDate)</td>
+        </tr>
+    </table>
+    <hr />
+</div>

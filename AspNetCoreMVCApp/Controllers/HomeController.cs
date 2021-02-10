@@ -23,7 +23,7 @@ namespace AspNetCoreMVCApp.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            return View(new SalesEntryFormModel() { SalesmanLogin = HttpContext.User.Identity.Name, CurrentDate = DateTime.Now.ToString("yyyy/MM/dd") });
+            return View();
         }
 
         [HttpGet]
@@ -46,11 +46,11 @@ namespace AspNetCoreMVCApp.Controllers
 
             var userPricipal = new ClaimsPrincipal(new[] { userIdentities });
 
-            if(model.Password == "akmal")
+            if(model.Password == "mypassword")
             {
                 HttpContext.SignInAsync(userPricipal);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Sales");
             }
 
             return RedirectToAction("NotAuthorized");
