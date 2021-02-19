@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Products.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Claims;
 
 namespace AspNetCoreMVCApp.Controllers
@@ -46,11 +48,16 @@ namespace AspNetCoreMVCApp.Controllers
 
             var userPricipal = new ClaimsPrincipal(new[] { userIdentities });
 
-            if(model.Password == "mypassword")
+            using (var context = new ProductsDatabaseContext())
             {
-                HttpContext.SignInAsync(userPricipal);
+                var user = context.SalesPeoples.FirstOrDefault(x => x.Login == model.UserName && x.Password == model.Password);
 
-                return RedirectToAction("Index", "Sales");
+                if (user != null)
+                {
+                    HttpContext.SignInAsync(userPricipal);
+
+                    return RedirectToAction("Index", "Sales");
+                }
             }
 
             return RedirectToAction("NotAuthorized");
