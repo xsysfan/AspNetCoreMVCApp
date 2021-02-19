@@ -1,6 +1,7 @@
 ﻿using AspNetCoreMVCApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Products.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,52 @@ namespace AspNetCoreMVCApp.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            return View(new SalesEntryFormModel() { SalesmanLogin = HttpContext.User.Identity.Name, CurrentDate = DateTime.Now.ToString("yyyy/MM/dd") });
+            using (var context = new ProductsDatabaseContext())
+            {
+                var userInfo = context.SalesPeoples.FirstOrDefault(x => x.Login == HttpContext.User.Identity.Name);
+                if (userInfo != null)
+                {
+                    var productsList = new List<SelectListItem>();
+
+                    foreach (var item in context.Products)
+                    {
+                        productsList.Add(new SelectListItem() { Value = item.ProductId.ToString(), Text = item.ProductName });
+                    }
+
+                    return View(new SalesEntryFormModel() { SalesmanLogin = userInfo.Login, CurrentDate = DateTime.Now.ToString("yyyy/MM/dd"), SalesPersonId = userInfo.SellerId, ProductList = productsList });
+                }
+                else
+                {
+                    return RedirectToAction("OptOut", "Home");
+                }
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Index([FromBody] SalesEntryFormModel inputData)
+        {
+            using (var context = new ProductsDatabaseContext())
+            {
+                var productInfo = context.Products.FirstOrDefault(x => x.ProductId == inputData.ProductId);
+                if (productInfo != null)
+                {
+                    context.Sales.Add(
+                        new Sale()
+                        {
+                            Amount = inputData.Amount,
+                            ProductId = inputData.ProductId,
+                            SellerId = inputData.SalesPersonId,
+                            TransactionDate = DateTime.UtcNow,
+                            Price = inputData.Price
+                        }
+                    );
+
+                    return RedirectToAction("ProductsList", "Sales");
+                }
+            }
+
+            return View(inputData);
         }
 
         [Authorize]
@@ -55,6 +101,5 @@ namespace AspNetCoreMVCApp.Controllers
         {
             return View();
         }
-
     }
 }
