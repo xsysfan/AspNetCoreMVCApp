@@ -1,0 +1,46 @@
+﻿@model SalesReportModel
+
+@{
+    ViewData["Title"] = "Sales Report";
+}
+
+<div class="text-center">
+    <h1>Sales Report</h1>
+    <br />
+    <br />
+    <hr />
+    <table width="100%">
+        <tr>
+            <td>Transaction</td>
+            <td>&nbsp;</td>
+            <td>Product</td>
+            <td>&nbsp;</td>
+            <td>Amount</td>
+            <td>&nbsp;</td>
+            <td>Price</td>
+            <td>&nbsp;</td>
+            <td>Total</td>
+            <td>&nbsp;</td>
+            <td>SalesPerson</td>
+            <td>&nbsp;</td>
+            <td>Date</td>
+        </tr>
+        @foreach (var item in Model.SalesItems)
+        {
+            <td>@Html.DisplayFor(modelItem => item.TransactionId)</td>
+            <td>&nbsp;</td>
+            <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+            <td>&nbsp;</td>
+            <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+            <td>&nbsp;</td>
+            <td>@Html.DisplayFor(modelItem => item.Price)</td>
+            <td>&nbsp;</td>
+            <td>@Html.DisplayFor(modelItem => item.Total)</td>
+            <td>&nbsp;</td>
+            <td>@Html.DisplayFor(modelItem => item.SellerName)</td>
+            <td>&nbsp;</td>
+            <td>@Html.DisplayFor(modelItem => item.TransactionDate)</td>
+        }
+    </table>
+    <hr />
+</div>
