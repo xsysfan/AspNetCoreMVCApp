@@ -3,3 +3,30 @@
 @{
     ViewData["Title"] = "Suppliers List";
 }
+
+<div class="text-center">
+    <h1>Supplers List</h1>
+    <br />
+    <br />
+    <hr />
+    <table width="100%">
+        <tr>
+            <td>Supplier SystemId</td>
+            <td>&nbsp;</td>
+            <td>Supplier Name</td>
+            <td>&nbsp;</td>
+            <td>Supplier Address</td>
+        </tr>
+        @foreach (var item in Model.Suppliers)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.SupplierId)</td>
+                <td>&nbsp;</td>
+                <td>@Html.DisplayFor(modelItem => item.SupplierName)</td>
+                <td>&nbsp;</td>
+                <td>@Html.DisplayFor(modelItem => item.SupplierAddress)</td>
+            </tr>
+        }
+    </table>
+    <hr />
+</div>

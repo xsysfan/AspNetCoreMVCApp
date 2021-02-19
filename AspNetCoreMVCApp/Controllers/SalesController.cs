@@ -1,4 +1,5 @@
-﻿using AspNetCoreMVCApp.Models;
+﻿using AspNetCoreMVCApp.Dto;
+using AspNetCoreMVCApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +14,7 @@ namespace AspNetCoreMVCApp.Controllers
     public class SalesController : Controller
     {
         [Authorize]
+        [HttpGet]
         public IActionResult Index()
         {
             using (var context = new ProductsDatabaseContext())
@@ -38,7 +40,7 @@ namespace AspNetCoreMVCApp.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult Index([FromBody] SalesEntryFormModel inputData)
+        public IActionResult Index(SalesEntryFormModel inputData)
         {
             using (var context = new ProductsDatabaseContext())
             {
@@ -52,11 +54,12 @@ namespace AspNetCoreMVCApp.Controllers
                             ProductId = inputData.ProductId,
                             SellerId = inputData.SalesPersonId,
                             TransactionDate = DateTime.UtcNow,
-                            Price = inputData.Price
+                            Price = productInfo.Price.Value
                         }
                     );
+                    context.SaveChanges();
 
-                    return RedirectToAction("ProductsList", "Sales");
+                    return RedirectToAction("SalesReport", "Sales");
                 }
             }
 
@@ -64,6 +67,7 @@ namespace AspNetCoreMVCApp.Controllers
         }
 
         [Authorize]
+        [HttpGet]
         public IActionResult SalesReport()
         {
             using (var context = new ProductsDatabaseContext())
@@ -91,15 +95,57 @@ namespace AspNetCoreMVCApp.Controllers
         }
 
         [Authorize]
+        [HttpGet]
         public IActionResult ProductsList()
         {
-            return View();
+            using (var context = new ProductsDatabaseContext())
+            {
+                var result = from products in context.Products
+                             join categories in context.Categories on products.CategoryId equals categories.CategoryId
+                             join suppliers in context.Supliers on products.SuplierId equals suppliers.SuplierId
+                             select new ProductDto()
+                             {
+                                 ProductId = products.ProductId,
+                                 Price = products.Price.Value,
+                                 ProductName = products.ProductName,
+                                 CategoryName = categories.CategoryName,
+                                 SupplierName = suppliers.SuplierName
+                             };
+
+                var model = new ProductsModel()
+                {
+                    Products = result.ToList()
+                };
+
+                return View(model);
+            }
         }
 
         [Authorize]
+        [HttpGet]
         public IActionResult Suppliers()
         {
-            return View();
+            using (var context = new ProductsDatabaseContext())
+            {
+                var result = new List<SupplierDto>();
+
+                foreach (var item in context.Supliers)
+                {
+                    result.Add(new SupplierDto()
+                    {
+                        SupplierId = item.SuplierId,
+                        SupplierName = item.SuplierName,
+                        SupplierAddress = item.Address
+                    });
+                }
+
+                var model = new SuppliersModel()
+                {
+                    Suppliers = result
+                };
+
+                return View(model);
+            }
         }
     }
 }

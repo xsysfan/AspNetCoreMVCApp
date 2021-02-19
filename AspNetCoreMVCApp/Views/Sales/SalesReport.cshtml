@@ -27,19 +27,21 @@
         </tr>
         @foreach (var item in Model.SalesItems)
         {
-            <td>@Html.DisplayFor(modelItem => item.TransactionId)</td>
-            <td>&nbsp;</td>
-            <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
-            <td>&nbsp;</td>
-            <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-            <td>&nbsp;</td>
-            <td>@Html.DisplayFor(modelItem => item.Price)</td>
-            <td>&nbsp;</td>
-            <td>@Html.DisplayFor(modelItem => item.Total)</td>
-            <td>&nbsp;</td>
-            <td>@Html.DisplayFor(modelItem => item.SellerName)</td>
-            <td>&nbsp;</td>
-            <td>@Html.DisplayFor(modelItem => item.TransactionDate)</td>
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.TransactionId)</td>
+                <td>&nbsp;</td>
+                <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                <td>&nbsp;</td>
+                <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                <td>&nbsp;</td>
+                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                <td>&nbsp;</td>
+                <td>@Html.DisplayFor(modelItem => item.Total)</td>
+                <td>&nbsp;</td>
+                <td>@Html.DisplayFor(modelItem => item.SellerName)</td>
+                <td>&nbsp;</td>
+                <td>@Html.DisplayFor(modelItem => item.TransactionDate)</td>
+            </tr>
         }
     </table>
     <hr />

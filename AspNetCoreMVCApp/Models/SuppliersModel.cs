@@ -1,11 +1,10 @@
-﻿using System;
+﻿using AspNetCoreMVCApp.Dto;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AspNetCoreMVCApp.Models
 {
     public class SuppliersModel
     {
+        public List<SupplierDto> Suppliers { get; set; }
     }
 }

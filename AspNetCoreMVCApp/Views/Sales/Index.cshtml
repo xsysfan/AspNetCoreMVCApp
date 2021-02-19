@@ -9,8 +9,7 @@
     <br />
     <br />
     <hr />
-    @using (Html.BeginForm("Index", "Sales", FormMethod.Post))
-    {
+    <form action="/Sales/Index" method="post">
         <table>
             <tr>
                 <td>
@@ -65,21 +64,11 @@
                 <td>&nbsp;</td>
             </tr>
             <tr>
-                <td>Price: </td>
-                <td>&nbsp;</td>
-                <td align="right">
-                    @Html.ValueFor(m => m.Price)
-                </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
                 <td></td>
                 <td>&nbsp;</td>
                 <td><input type="submit" value="Submit" /></td>
             </tr>
         </table>
-    }
+    </form>
     <hr />
 </div>

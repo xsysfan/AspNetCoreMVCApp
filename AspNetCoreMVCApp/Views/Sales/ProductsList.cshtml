@@ -3,3 +3,38 @@
 @{
     ViewData["Title"] = "Products List";
 }
+
+<div class="text-center">
+    <h1>Product List</h1>
+    <br />
+    <br />
+    <hr />
+    <table width="100%">
+        <tr>
+            <td>ProductId</td>
+            <td>&nbsp;</td>
+            <td>Product Name</td>
+            <td>&nbsp;</td>
+            <td>Price</td>
+            <td>&nbsp;</td>
+            <td>Category</td>
+            <td>&nbsp;</td>
+            <td>Supplier</td>
+        </tr>
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.ProductId)</td>
+                <td>&nbsp;</td>
+                <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                <td>&nbsp;</td>
+                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                <td>&nbsp;</td>
+                <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                <td>&nbsp;</td>
+                <td>@Html.DisplayFor(modelItem => item.SupplierName)</td>
+            </tr>
+        }
+    </table>
+    <hr />
+</div>
